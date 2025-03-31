@@ -57,26 +57,37 @@
     <audio data-key="76" src="sounds/tink.wav"></audio>
 
     <script>
-      function playSound() {
+      function playSound(event) {
         const audio = document.querySelector(`audio[data-key="${event.keyCode}"]`);
         const key = document.querySelector(`div[data-key="${event.keyCode}"]`);
 
         if (!audio) return;
         key.classList.add("playing");
+        // console.log("audio.currentTime", audio.currentTime);
         audio.currentTime = 0; // rewind to the start
         audio.play();
+        // setTimeout(() => audio.play(), 0);
       }
 
-      function removeTransition(event) {
-        if (event.propertyName !== "transform") return;
+      function afterPlaySound(event) {
+        // console.log("event", event.keyCode);
+        const key = document.querySelector(`div[data-key="${event.keyCode}"]`);
 
-        // console.log("event", event);
-        event.target.classList.remove("playing");
+        if (!key) return;
+        key.classList.remove("playing");
       }
 
-      const keys = document.querySelectorAll(".key");
-      keys.forEach((key) => key.addEventListener("transitionend", removeTransition));
+      // function removeTransition(event) {
+      //   if (event.propertyName !== "transform") return;
+
+      //   // console.log("event", event);
+      //   event.target.classList.remove("playing");
+      // }
+
+      // const keys = document.querySelectorAll(".key");
+      // keys.forEach((key) => key.addEventListener("transitionend", removeTransition));
       window.addEventListener("keydown", playSound);
+      window.addEventListener("keyup", afterPlaySound);
     </script>
   </body>
 </html>
